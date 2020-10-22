@@ -1,4 +1,5 @@
 import React from "react";
+import getUserLocale from "get-user-locale";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { format as timeAgo } from "timeago.js";
 import { Watch, MapPin, Navigation, Layers } from "react-feather";
@@ -19,10 +20,11 @@ import {
   Stack,
   AspectRatioBox,
   StatGroup,
+  Tooltip
 } from "@chakra-ui/core";
 
 import { useSpaceX } from "../utils/use-space-x";
-import { formatDateTime } from "../utils/format-date";
+import { formatDateTime, getUserTimezone } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 
@@ -124,7 +126,9 @@ function TimeAndLocation({ launch }) {
           </Box>
         </StatLabel>
         <StatNumber fontSize={["md", "xl"]}>
-          {formatDateTime(launch.launch_date_local)}
+          <Tooltip label={'Local Time: ' + formatDateTime(launch.launch_date_local, getUserLocale(), getUserTimezone())}>
+            { formatDateTime(launch.launch_date_utc) }
+          </Tooltip>
         </StatNumber>
         <StatHelpText>{timeAgo(launch.launch_date_utc)}</StatHelpText>
       </Stat>
