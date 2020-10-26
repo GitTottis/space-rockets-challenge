@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Flex, Text, Button } from "@chakra-ui/core";
+import { Flex, Text } from "@chakra-ui/core";
 
 import Launches from "./launches";
 import Launch from "./launch";

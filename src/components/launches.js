@@ -8,13 +8,13 @@ import { formatDate } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
-import { useFavoriteLaunchesState } from "../utils/localize-favorites";
+import { useFavoritesState } from "../utils/localize-favorites";
 
 const PAGE_SIZE = 12;
 
 export default function Launches() {
   
-  const [favouriteLaunches, setFavouriteLaunches] = useFavoriteLaunchesState('favouriteLaunches')
+  const [favouriteLaunches, setFavouriteLaunches] = useFavoritesState('favouriteLaunches')
   const { data, error, isValidating, setSize, size } = useSpaceXPaginated(
     "/launches/past",
     {

@@ -1,6 +1,6 @@
 import React from "react";
 
-export function useFavoriteLaunchesState(key) {
+export function useFavoritesState(key) {
     const [favourites, setFavourites] = React.useState(() => {
       const stickyValue = window.localStorage.getItem(key);
       return stickyValue !== null

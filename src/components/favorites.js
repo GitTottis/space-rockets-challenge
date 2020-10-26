@@ -1,16 +1,18 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
+import { Link } from "react-router-dom";
+import { useFavoritesState } from "../utils/localize-favorites"
 import {
     Drawer,
     DrawerBody,
-    DrawerFooter,
+    Box,
     DrawerHeader,
     DrawerOverlay,
     DrawerContent,
-    DrawerCloseButton,
+    // DrawerCloseButton,
     Button,
     CloseButton,
-    Link, List, ListItem,
+    List, ListItem,
     Flex,
     useDisclosure
   } from "@chakra-ui/core";
@@ -19,7 +21,9 @@ import {
   export default function Favorites() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const placement = "right";
-  
+    const [favoriteLaunches, setFavoriteLaunches] = useFavoritesState('favouriteLaunches')
+    const [favoritePads, setFavoritePads] = useFavoritesState('favouritePads')
+
     return (
       <>
         <Button
@@ -47,20 +51,71 @@ import {
                 <CloseButton size="md" onClick={onClose} />
               </Flex>
             </DrawerHeader>
-            
             <DrawerBody>
+            <Box
+              mt="1"
+              fontWeight="semibold"
+              as="h3"
+              lineHeight="tight"
+              isTruncated
+            >
+              Pads ({Object.keys(favoritePads).length})
+            </Box>
             <List>
               <Flex
                 align="center"
                 display="column"
                 wrap="wrap"
               >
-                <ListItem><Link>Pad 1</Link></ListItem>
-                <ListItem><Link>Launch 1</Link></ListItem>
-                <ListItem><Link>Pad 2</Link></ListItem>
-                <ListItem><Link>Pad 3</Link></ListItem>
-                <ListItem><Link>Launch 2</Link></ListItem>
-                <ListItem><Link>Launch 3</Link></ListItem>
+                {
+                  Object.entries(favoritePads)
+                    .map(([key, value]) => {
+                        return (
+                          <ListItem>
+                            <Box
+                              as={Link}
+                              to={`/launch-pads/${key}`}
+                            >
+                              {key}
+                            </Box>
+                          </ListItem>
+                        )
+                    })
+                }
+              </Flex>
+            </List>
+            <Box
+              mt="1"
+              fontWeight="semibold"
+              as="h3"
+              lineHeight="tight"
+              isTruncated
+            >
+              Launches ({Object.keys(favoriteLaunches).length})
+            </Box>
+            <List 
+              marginBottom="10px"
+            >
+              <Flex
+                align="center"
+                display="column"
+                wrap="wrap"
+              >
+                {
+                  Object.entries(favoriteLaunches)
+                    .map(([key, value]) => {
+                        return (
+                          <ListItem>
+                            <Box
+                              as={Link}
+                              to={`/launches/${value.flight_number.toString()}`}
+                            >
+                              {key}
+                            </Box>
+                          </ListItem>
+                        )
+                    })
+                }
               </Flex>
             </List>
             </DrawerBody>
