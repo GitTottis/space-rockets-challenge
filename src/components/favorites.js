@@ -2,21 +2,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFavoritesState } from "../utils/localize-favorites"
+import FavoriteItem from  "./favorite-item"
 import {
     Drawer,
     DrawerBody,
     Box,
+    Text,
+    IconButton,
     DrawerHeader,
     DrawerOverlay,
     DrawerContent,
-    // DrawerCloseButton,
     Button,
     CloseButton,
     List, ListItem,
     Flex,
     useDisclosure
   } from "@chakra-ui/core";
-
 
   export default function Favorites() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,7 +41,7 @@ import {
         <Drawer
             placement={placement} onClose={onClose} isOpen={isOpen}>
           <DrawerOverlay />
-          <DrawerContent   marginTop="88px">
+          <DrawerContent marginTop="88px">
             <DrawerHeader borderBottomWidth="1px">
               <Flex
                 align="center"
@@ -53,15 +54,17 @@ import {
             </DrawerHeader>
             <DrawerBody>
             <Box
-              mt="1"
               fontWeight="semibold"
               as="h3"
               lineHeight="tight"
+              mb={2}
               isTruncated
             >
               Pads ({Object.keys(favoritePads).length})
             </Box>
-            <List>
+            <List
+              mb={4}
+            >
               <Flex
                 align="center"
                 display="column"
@@ -70,16 +73,7 @@ import {
                 {
                   Object.entries(favoritePads)
                     .map(([key, value]) => {
-                        return (
-                          <ListItem>
-                            <Box
-                              as={Link}
-                              to={`/launch-pads/${key}`}
-                            >
-                              {key}
-                            </Box>
-                          </ListItem>
-                        )
+                      return <FavoriteItem itemType={"pads"} data={value} />
                     })
                 }
               </Flex>
@@ -89,13 +83,12 @@ import {
               fontWeight="semibold"
               as="h3"
               lineHeight="tight"
+              mb={2}
               isTruncated
             >
               Launches ({Object.keys(favoriteLaunches).length})
             </Box>
-            <List 
-              marginBottom="10px"
-            >
+            <List>
               <Flex
                 align="center"
                 display="column"
@@ -104,16 +97,7 @@ import {
                 {
                   Object.entries(favoriteLaunches)
                     .map(([key, value]) => {
-                        return (
-                          <ListItem>
-                            <Box
-                              as={Link}
-                              to={`/launches/${value.flight_number.toString()}`}
-                            >
-                              {key}
-                            </Box>
-                          </ListItem>
-                        )
+                        return <FavoriteItem itemType={"launch"} data={value} />
                     })
                 }
               </Flex>
