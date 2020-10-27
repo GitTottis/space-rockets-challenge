@@ -1,27 +1,25 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
-import { Link } from "react-router-dom";
 import { useFavoritesState } from "../utils/localize-favorites"
 import FavoriteItem from  "./favorite-item"
 import {
     Drawer,
     DrawerBody,
     Box,
-    Text,
-    IconButton,
     DrawerHeader,
     DrawerOverlay,
     DrawerContent,
     Button,
     CloseButton,
-    List, ListItem,
+    List,
     Flex,
     useDisclosure
   } from "@chakra-ui/core";
 
+  const PLACEMENT = "right";
+
   export default function Favorites() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const placement = "right";
+    const { isOpen, onOpen, onToggle, onClose } = useDisclosure();
     const [favoriteLaunches, setFavoriteLaunches] = useFavoritesState('favouriteLaunches')
     const [favoritePads, setFavoritePads] = useFavoritesState('favouritePads')
 
@@ -39,7 +37,7 @@ import {
           F4V0R!TE5
         </Button>
         <Drawer
-            placement={placement} onClose={onClose} isOpen={isOpen}>
+            placement={PLACEMENT} onToggle={onToggle} isOpen={isOpen} onClose={onToggle}>
           <DrawerOverlay />
           <DrawerContent marginTop="88px">
             <DrawerHeader borderBottomWidth="1px">
@@ -73,7 +71,7 @@ import {
                 {
                   Object.entries(favoritePads)
                     .map(([key, value]) => {
-                      return <FavoriteItem itemType={"pads"} data={value} />
+                      return <FavoriteItem favouriteType={'favouritePads'} data={value} favoriteSetter={setFavoritePads} />
                     })
                 }
               </Flex>
@@ -97,7 +95,7 @@ import {
                 {
                   Object.entries(favoriteLaunches)
                     .map(([key, value]) => {
-                        return <FavoriteItem itemType={"launch"} data={value} />
+                        return <FavoriteItem favouriteType={'favouriteLaunches'} data={value} favoriteSetter={setFavoriteLaunches}/>
                     })
                 }
               </Flex>

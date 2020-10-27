@@ -2,11 +2,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Box, IconButton, ListItem, Text } from "@chakra-ui/core";
+import { ACTIONS } from "../utils/localize-favorites"
 
-  export default function FavoriteItem({itemType, data}) {
-    if (itemType === 'launch') {
-        return (
-            <ListItem>
+export default function FavoriteItem({itemType, data, favoriteSetter}) {
+    const [btnState, setBtnState] = React.useState( true )
+    return (
+        <ListItem>
             <Box
                 d="flex" 
                 alignItems="baseline" 
@@ -18,16 +19,15 @@ import { Box, IconButton, ListItem, Text } from "@chakra-ui/core";
                 mb={1}
             >
                 <Box
-                as={Link}
-                to={`/launches/${data.flight_number.toString()}`}
+                    as={Link}
+                    to={ itemType === 'favouriteLaunches' ? (`/launches/${data.flight_number.toString()}`) : (`/launch-pads/${data.site_id}`)}
                 >
-                {/* {key} */}
                 <Box
                     ml="2"
                     fontWeight="semibold"
                     isTruncated
                 >
-                    {data.mission_name}
+                    { itemType === 'favouriteLaunches' ? ( data.mission_name ) : (data.name) }
                 </Box>
                 <Box
                     color="gray.500"
@@ -37,75 +37,46 @@ import { Box, IconButton, ListItem, Text } from "@chakra-ui/core";
                     textTransform="uppercase"
                     ml="2"
                 >
-                    {data.rocket.rocket_name} &bull; {data.launch_site.site_name}
+                    { itemType === 'favouriteLaunches' 
+                        ?   `${data.rocket.rocket_name} &bull; ${data.launch_site.site_name}` 
+                        :   ( 
+                                <Text 
+                                    ml="2" 
+                                    color="gray.500"
+                                    fontSize="sm"
+                                >
+                                    { itemType === 'favouriteLaunches' ? (data.vehicles_launched.join(", ")) : null }
+                                </Text>
+                            )
+                    }
                 </Box>
                 </Box>
                 <Box 
-                pos="absolute"
-                right="0"
+                    pos="absolute"
+                    right="0"
                 >
                 <IconButton
                     align="center"
                     border="none"
                     variant="outline"
-                    variantColor="yellow"
+                    variantColor={ btnState ? "yellow" : "gray" }
                     aria-label="Call Sage"
                     icon={"star"}
-                    // onClick={ () =>setFavouritePads(appendNewFavourite())}
+                    _hover={{ variantColor: !btnState ? "yellow" : "gray" }}
+                    onClick={
+                        () => {
+                            favoriteSetter({ 
+                                type:   btnState 
+                                        ? itemType === 'favouriteLaunches' ? ACTIONS.REMOVE_FAVORITE_LAUNCH : ACTIONS.REMOVE_FAVORITE_PAD
+                                        : itemType === 'favouriteLaunches' ? ACTIONS.ADD_FAVORITE_LAUNCH    : ACTIONS.REMOVE_FAVORITE_PAD,
+                                payload: data 
+                            })
+                            setBtnState(!btnState)
+                        }
+                    }
                 />
                 </Box>
             </Box>
-            </ListItem>
-        )
-    }
-    else {
-        return (
-            <ListItem>
-              <Box
-                d="flex" 
-                alignItems="baseline" 
-                justifyContent="space-between"
-                boxShadow="md"
-                rounded="lg"
-                overflow="hidden"
-                position="relative"
-                mb={1}
-              >
-                <Box
-                  as={Link}
-                  to={`/launch-pads/${data.site_id}`}
-                >
-                  <Box
-                    ml="2"
-                    fontWeight="semibold"
-                    isTruncated
-                  >
-                    {data.name}
-                  </Box>
-                  <Text 
-                    ml="2" 
-                    color="gray.500"
-                    fontSize="sm"
-                  >
-                    {data.vehicles_launched.join(", ")}
-                  </Text>
-                </Box>
-                <Box
-                  pos="absolute"
-                  right="0"
-                >
-                  <IconButton
-                    border="none"
-                    variant="outline"
-                    variantColor="yellow"
-                    aria-label="Call Sage"
-                    icon={"star"}
-                    // onClick={ () =>setFavouritePads(appendNewFavourite())}
-                  />
-                </Box>
-              </Box>
-            </ListItem>
-          )
-    }
-
-  }
+        </ListItem>
+    )
+}

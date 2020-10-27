@@ -8,7 +8,7 @@ import { formatDate } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
-import { useFavoritesState } from "../utils/localize-favorites";
+import { useFavoritesState, ACTIONS } from "../utils/localize-favorites";
 
 const PAGE_SIZE = 12;
 
@@ -49,12 +49,8 @@ export default function Launches() {
 }
 
 export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) {
-
-  function appendNewFavourite() {
-    favouriteLaunches[launch.flight_number.toString()] = launch
-    return favouriteLaunches
-  }
-
+  const [btnState, setBtnState] = React.useState( launch.flight_number.toString() in favouriteLaunches)
+  
   return (
     <Box
       boxShadow="md"
@@ -116,15 +112,19 @@ export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) 
             <IconButton
               border="none"
               variant="outline"
-              variantColor="yellow"
+              variantColor= { btnState ? "yellow" : "gray" }
               aria-label="Call Sage"
               fontSize="20px"
               icon={"star"}
-              onClick={ () =>setFavouriteLaunches(appendNewFavourite())}
+              onClick={
+                () => {
+                  setFavouriteLaunches({ type: btnState ? ACTIONS.REMOVE_FAVORITE_LAUNCH : ACTIONS.ADD_FAVORITE_LAUNCH, payload: launch })
+                  setBtnState(!btnState)
+                }
+              }
             />
           </Box>
         </Box>
-
         <Box
           mt="1"
           fontWeight="semibold"

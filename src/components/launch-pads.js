@@ -6,7 +6,7 @@ import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 import { useSpaceXPaginated } from "../utils/use-space-x";
-import { useFavoritesState } from "../utils/localize-favorites";
+import { useFavoritesState, ACTIONS } from "../utils/localize-favorites";
 
 const PAGE_SIZE = 12;
 
@@ -44,12 +44,7 @@ export default function LaunchPads() {
 }
 
 function LaunchPadItem({ launchPad, favouritePads, setFavouritePads }) {
-  
-  function appendNewFavourite() {
-    favouritePads[launchPad.site_id.toString()] = launchPad
-    console.log(favouritePads)
-    return favouritePads
-  }
+  const [btnState, setBtnState] = React.useState( launchPad.site_id.toString() in favouritePads)
 
   return (
     <Box
@@ -91,11 +86,16 @@ function LaunchPadItem({ launchPad, favouritePads, setFavouritePads }) {
               <IconButton
                 border="none"
                 variant="outline"
-                variantColor="yellow"
+                variantColor={ btnState ? "yellow" : "gray" }
                 aria-label="Call Sage"
                 fontSize="20px"
                 icon={"star"}
-                onClick={ () =>setFavouritePads(appendNewFavourite())}
+                onClick={ 
+                  () => {
+                    setFavouritePads({ type: btnState ? ACTIONS.REMOVE_FAVORITE_PAD : ACTIONS.ADD_FAVORITE_PAD, payload: launchPad })
+                    setBtnState(!btnState)
+                  }
+                }
               />
             </Box>
           </Box>
