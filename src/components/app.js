@@ -8,10 +8,11 @@ import Home from "./home";
 import LaunchPads from "./launch-pads";
 import LaunchPad from "./launch-pad";
 import Favorites from "./favorites";
+import FavoritesContextProvider from "../contexts/favorites-context"
 
 export default function App() {
   return (
-    <div>
+    <FavoritesContextProvider>
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -20,7 +21,7 @@ export default function App() {
         <Route path="/launch-pads" element={<LaunchPads />} />
         <Route path="/launch-pads/:launchPadId" element={<LaunchPad />} />
       </Routes>
-    </div>
+    </FavoritesContextProvider>
   );
 }
 

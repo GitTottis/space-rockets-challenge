@@ -8,13 +8,19 @@ import { formatDate } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
-import { useFavoritesState, ACTIONS } from "../utils/localize-favorites";
+import { ACTIONS } from "../contexts/favorites-context";
+import { useFavoritesContext, useFavoritesUpdateContext } from "../contexts/favorites-context";
 
 const PAGE_SIZE = 12;
 
+function getLaunchPayload(data) {
+  return { ...data, type: 'launch' }
+}
+
 export default function Launches() {
-  
-  const [favouriteLaunches, setFavouriteLaunches] = useFavoritesState('favouriteLaunches')
+  const favouriteLaunches = useFavoritesContext()
+  const setFavouriteLaunches = useFavoritesUpdateContext()
+
   const { data, error, isValidating, setSize, size } = useSpaceXPaginated(
     "/launches/past",
     {
@@ -49,8 +55,8 @@ export default function Launches() {
 }
 
 export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) {
-  const [btnState, setBtnState] = React.useState( launch.flight_number.toString() in favouriteLaunches)
-  
+  const [btnState, setBtnState] = React.useState(  favouriteLaunches[launch.flight_number.toString()] )
+
   return (
     <Box
       boxShadow="md"
@@ -112,13 +118,13 @@ export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) 
             <IconButton
               border="none"
               variant="outline"
-              variantColor= { btnState ? "yellow" : "gray" }
+              variantColor= {btnState ? "yellow" : "gray" }
               aria-label="Call Sage"
               fontSize="20px"
               icon={"star"}
               onClick={
                 () => {
-                  setFavouriteLaunches({ type: btnState ? ACTIONS.REMOVE_FAVORITE_LAUNCH : ACTIONS.ADD_FAVORITE_LAUNCH, payload: launch })
+                  setFavouriteLaunches({ type: btnState ? ACTIONS.REMOVE_FAVORITE: ACTIONS.ADD_FAVORITE, payload: getLaunchPayload(launch) })
                   setBtnState(!btnState)
                 }
               }

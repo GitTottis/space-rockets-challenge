@@ -1,12 +1,23 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, IconButton, ListItem, Text } from "@chakra-ui/core";
-import { ACTIONS } from "../utils/localize-favorites"
+import { ACTIONS } from "../contexts/favorites-context"
+import { useFavoritesUpdateContext } from "../contexts/favorites-context";
 
-export default function FavoriteItem({itemType, data, favoriteSetter}) {
-    const [btnState, setBtnState] = React.useState( true )
-    return (
+export default function FavoriteItem({favouriteData, keyId}) {
+    const [showItem, setShowItem] = useState(true);
+    // const data = useFavoritesContext()
+    const favoriteSetter = useFavoritesUpdateContext()
+    
+    const deleteFavorite = () => {
+        favoriteSetter({ 
+            type:    ACTIONS.REMOVE_FAVORITE,
+            payload: favouriteData
+        })
+    }
+
+    return showItem && (
         <ListItem>
             <Box
                 d="flex" 
@@ -20,14 +31,14 @@ export default function FavoriteItem({itemType, data, favoriteSetter}) {
             >
                 <Box
                     as={Link}
-                    to={ itemType === 'favouriteLaunches' ? (`/launches/${data.flight_number.toString()}`) : (`/launch-pads/${data.site_id}`)}
+                    to={ favouriteData.type === 'launch' ? (`/launches/${favouriteData.flight_number.toString()}`) : (`/launch-pads/${favouriteData.site_id}`)}
                 >
                 <Box
                     ml="2"
                     fontWeight="semibold"
                     isTruncated
                 >
-                    { itemType === 'favouriteLaunches' ? ( data.mission_name ) : (data.name) }
+                    { favouriteData.type === 'launch' ? ( favouriteData.mission_name ) : (favouriteData.name) }
                 </Box>
                 <Box
                     color="gray.500"
@@ -37,15 +48,15 @@ export default function FavoriteItem({itemType, data, favoriteSetter}) {
                     textTransform="uppercase"
                     ml="2"
                 >
-                    { itemType === 'favouriteLaunches' 
-                        ?   `${data.rocket.rocket_name} &bull; ${data.launch_site.site_name}` 
+                    { favouriteData.type === 'launch'
+                        ?   `${favouriteData.rocket.rocket_name} &bull; ${favouriteData.launch_site.site_name}` 
                         :   ( 
                                 <Text 
                                     ml="2" 
                                     color="gray.500"
                                     fontSize="sm"
                                 >
-                                    { itemType === 'favouriteLaunches' ? (data.vehicles_launched.join(", ")) : null }
+                                    { favouriteData.type === 'launch' ? (favouriteData.vehicles_launched.join(", ")) : null }
                                 </Text>
                             )
                     }
@@ -59,21 +70,13 @@ export default function FavoriteItem({itemType, data, favoriteSetter}) {
                     align="center"
                     border="none"
                     variant="outline"
-                    variantColor={ btnState ? "yellow" : "gray" }
+                    variantColor={ "gray" }
                     aria-label="Call Sage"
-                    icon={"star"}
-                    _hover={{ variantColor: !btnState ? "yellow" : "gray" }}
-                    onClick={
-                        () => {
-                            favoriteSetter({ 
-                                type:   btnState 
-                                        ? itemType === 'favouriteLaunches' ? ACTIONS.REMOVE_FAVORITE_LAUNCH : ACTIONS.REMOVE_FAVORITE_PAD
-                                        : itemType === 'favouriteLaunches' ? ACTIONS.ADD_FAVORITE_LAUNCH    : ACTIONS.REMOVE_FAVORITE_PAD,
-                                payload: data 
-                            })
-                            setBtnState(!btnState)
-                        }
-                    }
+                    icon={"minus"}
+                    onClick={() => {
+                        setShowItem(false)
+                        deleteFavorite()
+                    }}
                 />
                 </Box>
             </Box>

@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
-import { useFavoritesState } from "../utils/localize-favorites"
+import { useFavoritesContext } from "../contexts/favorites-context";
 import FavoriteItem from  "./favorite-item"
 import {
     Drawer,
@@ -20,9 +20,11 @@ import {
 
   export default function Favorites() {
     const { isOpen, onOpen, onToggle, onClose } = useDisclosure();
-    const [favoriteLaunches, setFavoriteLaunches] = useFavoritesState('favouriteLaunches')
-    const [favoritePads, setFavoritePads] = useFavoritesState('favouritePads')
-
+    // const [favoriteLaunches, setFavoriteLaunches] = useFavoritesState('favouriteLaunches')
+    // const [favoritePads, setFavoritePads] = useFavoritesState('favouritePads')
+    const favourites = useFavoritesContext()
+    // const setFavouritePads = useFavoritesUpdateContext()
+  
     return (
       <>
         <Button
@@ -37,7 +39,7 @@ import {
           F4V0R!TE5
         </Button>
         <Drawer
-            placement={PLACEMENT} onToggle={onToggle} isOpen={isOpen} onClose={onToggle}>
+            placement={PLACEMENT} isOpen={isOpen} onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent marginTop="88px">
             <DrawerHeader borderBottomWidth="1px">
@@ -58,7 +60,11 @@ import {
               mb={2}
               isTruncated
             >
-              Pads ({Object.keys(favoritePads).length})
+              Pads  {   Object.values(favourites).filter(favourite => favourite.type === 'pad').length > 0 
+                          ? ` (${Object.values(favourites).filter(favourite => favourite.type === 'pad').length})`
+                          : `(no favorites)`
+                        }
+              {/* Pads { Object.keys(favourites).length > 0 ? `(${Object.keys(favourites).length})` : `(no favorite pad)`} */}
             </Box>
             <List
               mb={4}
@@ -69,33 +75,39 @@ import {
                 wrap="wrap"
               >
                 {
-                  Object.entries(favoritePads)
+                  Object.entries(favourites)
+                    .filter( ([key, value]) => value.type === 'pad')
                     .map(([key, value]) => {
-                      return <FavoriteItem favouriteType={'favouritePads'} data={value} favoriteSetter={setFavoritePads} />
+                      return <FavoriteItem favouriteData={ value } keyId={key} key={key}/>
                     })
                 }
               </Flex>
             </List>
             <Box
-              mt="1"
               fontWeight="semibold"
               as="h3"
               lineHeight="tight"
               mb={2}
               isTruncated
             >
-              Launches ({Object.keys(favoriteLaunches).length})
+              Launches  {   Object.values(favourites).filter(favourite => favourite.type === 'launch').length > 0 
+                          ? ` (${Object.values(favourites).filter(favourite => favourite.type === 'launch').length})`
+                          : `(no favorites)`
+                        }
             </Box>
-            <List>
+            <List
+              mb={4}
+            >
               <Flex
                 align="center"
                 display="column"
                 wrap="wrap"
               >
                 {
-                  Object.entries(favoriteLaunches)
+                  Object.entries(favourites)
+                    .filter( ([key, value]) => value.type === 'launch')
                     .map(([key, value]) => {
-                        return <FavoriteItem favouriteType={'favouriteLaunches'} data={value} favoriteSetter={setFavoriteLaunches}/>
+                      return <FavoriteItem favouriteData={ value } keyId={key} key={key}/>
                     })
                 }
               </Flex>

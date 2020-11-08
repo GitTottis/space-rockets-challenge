@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge, Box, IconButton, SimpleGrid, Text } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 
@@ -6,12 +6,19 @@ import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 import { useSpaceXPaginated } from "../utils/use-space-x";
-import { useFavoritesState, ACTIONS } from "../utils/localize-favorites";
+import { ACTIONS } from "../contexts/favorites-context";
+import { useFavoritesContext, useFavoritesUpdateContext } from "../contexts/favorites-context";
 
 const PAGE_SIZE = 12;
 
+function getPadPayload(data) {
+  return { ...data, type: 'pad' }
+}
+
 export default function LaunchPads() {
-  const [favouritePads, setFavouritePads] = useFavoritesState('favouritePads')
+  const favouritePads = useFavoritesContext()
+  const setFavouritePads = useFavoritesUpdateContext()
+
   const { data, error, isValidating, size, setSize } = useSpaceXPaginated(
     "/launchpads",
     {
@@ -86,14 +93,14 @@ function LaunchPadItem({ launchPad, favouritePads, setFavouritePads }) {
               <IconButton
                 border="none"
                 variant="outline"
-                variantColor={ btnState ? "yellow" : "gray" }
+                variantColor="gray"
                 aria-label="Call Sage"
                 fontSize="20px"
-                icon={"star"}
+                icon={"add"}
                 onClick={ 
                   () => {
-                    setFavouritePads({ type: btnState ? ACTIONS.REMOVE_FAVORITE_PAD : ACTIONS.ADD_FAVORITE_PAD, payload: launchPad })
                     setBtnState(!btnState)
+                    setFavouritePads({ type: launchPad.site_id.toString() in favouritePads ? ACTIONS.REMOVE_FAVORITE : ACTIONS.ADD_FAVORITE, payload: getPadPayload(launchPad) })
                   }
                 }
               />
