@@ -46,8 +46,8 @@ export default function FavoritesContextProvider({ children }) {
       });
 
     return (
-        <FavoritesContext.Provider value={favourites}>
-            <FavoritesUpdateContext.Provider value={setFavourites}>
+        <FavoritesContext.Provider value={{ favourites }}>
+            <FavoritesUpdateContext.Provider value={{ setFavourites }}>
                 { children }
             </FavoritesUpdateContext.Provider>
         </FavoritesContext.Provider>
