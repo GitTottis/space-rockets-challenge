@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUserContext, useSetUserContext } from "../../contexts/auth-context";
+import { useUserContext } from "../../contexts/auth-context";
 import { Button } from "@chakra-ui/core";
 import firebase from "firebase";
 
@@ -14,7 +14,6 @@ function getAuthProvider(type) {
 export default function Login({ type }) {
 
     const { user } = useUserContext()
-    // const { setUser } = useSetUserContext()
 
     const loginWithSocial = () => {
 
