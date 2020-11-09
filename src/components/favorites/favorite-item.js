@@ -2,12 +2,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, IconButton, ListItem, Text } from "@chakra-ui/core";
-import { ACTIONS } from "../contexts/favorites-context"
-import { useFavoritesUpdateContext } from "../contexts/favorites-context";
+import { ACTIONS, useFavoritesUpdateContext } from "../../contexts/favorites-context"
 
 export default function FavoriteItem({favouriteData, keyId}) {
     const [showItem, setShowItem] = useState(true);
-    // const data = useFavoritesContext()
+
     const favoriteSetter = useFavoritesUpdateContext()
     
     const deleteFavorite = () => {

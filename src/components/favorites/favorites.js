@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
-import { useFavoritesContext } from "../contexts/favorites-context";
+import { useFavoritesContext } from "../../contexts/favorites-context";
 import FavoriteItem from  "./favorite-item"
 import {
     Drawer,
@@ -19,7 +19,7 @@ import {
   const PLACEMENT = "right";
 
   export default function Favorites() {
-    const { isOpen, onOpen, onToggle, onClose } = useDisclosure();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     // const [favoriteLaunches, setFavoriteLaunches] = useFavoritesState('favouriteLaunches')
     // const [favoritePads, setFavoritePads] = useFavoritesState('favouritePads')
     const favourites = useFavoritesContext()

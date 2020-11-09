@@ -3,13 +3,12 @@ import { Badge, Box, Image, SimpleGrid, Text, Flex, IconButton } from "@chakra-u
 import { format as timeAgo } from "timeago.js";
 import { Link } from "react-router-dom";
 
-import { useSpaceXPaginated } from "../utils/use-space-x";
-import { formatDate } from "../utils/format-date";
-import Error from "./error";
-import Breadcrumbs from "./breadcrumbs";
+import { useSpaceXPaginated } from "../../utils/use-space-x";
+import { formatDate } from "../../utils/format-date";
+import Error from "../error";
+import Breadcrumbs from "../breadcrumbs";
 import LoadMoreButton from "./load-more-button";
-import { ACTIONS } from "../contexts/favorites-context";
-import { useFavoritesContext, useFavoritesUpdateContext } from "../contexts/favorites-context";
+import { ACTIONS, useFavoritesContext, useFavoritesUpdateContext } from "../../contexts/favorites-context";
 
 const PAGE_SIZE = 12;
 

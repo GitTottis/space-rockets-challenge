@@ -12,6 +12,8 @@
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "firebase": "^8.0.1",
+    "firebaseui": "^4.7.1",
     "get-user-locale": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

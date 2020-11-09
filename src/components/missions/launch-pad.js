@@ -16,11 +16,11 @@ import {
   Stack,
   AspectRatioBox,
 } from "@chakra-ui/core";
-
-import { useSpaceX } from "../utils/use-space-x";
-import Error from "./error";
-import Breadcrumbs from "./breadcrumbs";
 import { LaunchItem } from "./launches";
+
+import { useSpaceX } from "../../utils/use-space-x";
+import Error from "../error";
+import Breadcrumbs from "../breadcrumbs";
 
 export default function LaunchPad() {
   let { launchPadId } = useParams();

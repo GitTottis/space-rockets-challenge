@@ -23,10 +23,10 @@ import {
   Tooltip
 } from "@chakra-ui/core";
 
-import { useSpaceX } from "../utils/use-space-x";
-import { formatDateTime, getUserTimezone } from "../utils/format-date";
-import Error from "./error";
-import Breadcrumbs from "./breadcrumbs";
+import { useSpaceX } from "../../utils/use-space-x";
+import { formatDateTime, getUserTimezone } from "../../utils/format-date";
+import Error from "../error";
+import Breadcrumbs from "../breadcrumbs";
 
 export default function Launch() {
   let { launchId } = useParams();
