@@ -2,15 +2,10 @@ import React, { useEffect, useState, createContext, useContext } from 'react'
 import app from '../firebase/firebase-app'
 
 export const AuthContext = createContext();
-// export const AuthContextSetter = createContext();
 
 export function useUserContext() {
     return useContext(AuthContext)
 }
-
-// export function useSetUserContext() {
-//     return useContext(AuthContextSetter)
-// }
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -21,9 +16,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user }}>
-            {/* <AuthContextSetter.Provider value={{ setUser }}> */}
-                { children }
-            {/* </AuthContextSetter.Provider> */}
+            { children }
         </AuthContext.Provider>
     )
 }

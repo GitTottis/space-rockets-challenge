@@ -17,8 +17,8 @@ function getLaunchPayload(data) {
 }
 
 export default function Launches() {
-  const favouriteLaunches = useFavoritesContext()
-  const setFavouriteLaunches = useFavoritesUpdateContext()
+  const favourites = useFavoritesContext()
+  const setFavourites = useFavoritesUpdateContext()
 
   const { data, error, isValidating, setSize, size } = useSpaceXPaginated(
     "/launches/past",
@@ -40,7 +40,7 @@ export default function Launches() {
           data
             .flat()
             .map((launch) => (
-              <LaunchItem launch={launch} favouriteLaunches={favouriteLaunches} setFavouriteLaunches={setFavouriteLaunches} key={launch.flight_number} />
+              <LaunchItem launch={launch} favouriteLaunches={favourites} setFavouriteLaunches={setFavourites} key={launch.flight_number} />
             ))}
       </SimpleGrid>
       <LoadMoreButton
@@ -54,7 +54,7 @@ export default function Launches() {
 }
 
 export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) {
-  const [btnState, setBtnState] = React.useState(  favouriteLaunches[launch.flight_number.toString()] )
+  const [btnState, setBtnState] = React.useState( favouriteLaunches[launch.flight_number.toString()] )
 
   return (
     <Box
