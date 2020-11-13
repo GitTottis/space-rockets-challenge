@@ -1,6 +1,8 @@
 import React from 'react';
 import { useUserContext } from "../../contexts/auth-context";
+import { useFavoritesUpdateContext } from "../../contexts/favorites-context";
 import { Button } from "@chakra-ui/core";
+import { read } from  "../../firebase/firestore";
 import firebase from "firebase";
 
 function getAuthProvider(type) {
@@ -14,6 +16,7 @@ function getAuthProvider(type) {
 export default function Login({ type }) {
 
     const { user } = useUserContext()
+    const setFavourites = useFavoritesUpdateContext()
 
     const loginWithSocial = () => {
 
@@ -26,11 +29,16 @@ export default function Login({ type }) {
                 // The signed-in user info.
                 var currentUser = result.user;
 
-                // setUser(currentUser)
-                console.log("user to be changed to ", currentUser)
-                console.log("user is changed to ", user)
-                // ...
-            }).catch(function(error) { 
+                // When singing in we must read if the user has any favorites in Firestore. 
+                read(currentUser).then( doc => {
+                    if(doc.exists) {
+                        console.log("Document data", {...doc.data()})
+                        setFavourites({...doc.data()})
+                    }
+                }).catch( e => {
+                    console.error("Error getting document:", e)
+                })
+            }).catch( error => { 
                 // TODO Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -42,8 +50,6 @@ export default function Login({ type }) {
                 // var credential = error.credential;
                 // ...
             });
-        } else { 
-            console.info('Already Logged In', user)
         }
     }
 

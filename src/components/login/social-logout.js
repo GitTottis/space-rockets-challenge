@@ -15,13 +15,22 @@ export default function Logout() {
         if ( !!user ) {
             // First write to Firestore the selected Favorites
             write(favourites, user)
-            firebase.auth().signOut().then(function() {
-                // Sign-out successful.
-                console.log("Signed out OK. Redirected to Home")
-              }).catch(function(error) {
-                // An error happened.
-                console.log("Error ",error)
-              });
+                .then(()=> {
+                    firebase.auth().signOut().then(function() {
+                        // Sign-out successful.
+                        console.info("Signed out OK. Redirecting to Home")
+                    }).catch(function(error) {
+                        // An error happened.
+                        console.error("Error when Singing out ",error)
+                    });
+                })
+                .catch( error => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    
+                    console.log("Error ", errorCode, errorMessage)
+                    // TODO Handle Errors here.
+                })
         }
     }
 
