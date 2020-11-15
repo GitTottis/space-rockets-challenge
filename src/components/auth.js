@@ -14,7 +14,7 @@ const AuthRoute = ({ element: RouteComponent, ...rest }) => {
         >
         </Route>
     ) : (
-        <Flex 
+        <Flex
             justify="center" 
             h="100vh"
             alignContent="stretch"
