@@ -9,6 +9,7 @@ import Error from "../error";
 import Breadcrumbs from "../breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 import { ACTIONS, useFavoritesContext, useFavoritesUpdateContext } from "../../contexts/favorites-context";
+import Notification, { ALERT_STATUSES, getNotificationData }  from "../notification";
 
 const PAGE_SIZE = 12;
 
@@ -19,7 +20,7 @@ function getLaunchPayload(data) {
 export default function Launches() {
   const favourites = useFavoritesContext()
   const setFavourites = useFavoritesUpdateContext()
-
+  const [ notificationData, setNotificationData ] = React.useState({})
   const { data, error, isValidating, setSize, size } = useSpaceXPaginated(
     "/launches/past",
     {
@@ -30,30 +31,38 @@ export default function Launches() {
   );
 
   return (
-    <div>
-      <Breadcrumbs
-        items={[{ label: "Home", to: "/" }, { label: "Launches" }]}
-      />
-      <SimpleGrid m={[2, null, 6]} minChildWidth="350px" spacing="4">
-        {error && <Error />}
-        {data &&
-          data
-            .flat()
-            .map((launch) => (
-              <LaunchItem launch={launch} favouriteLaunches={favourites} setFavouriteLaunches={setFavourites} key={launch.flight_number} />
-            ))}
-      </SimpleGrid>
-      <LoadMoreButton
-        loadMore={() => setSize(size + 1)}
-        data={data}
-        pageSize={PAGE_SIZE}
-        isLoadingMore={isValidating}
-      />
-    </div>
+    <>
+      { !!notificationData ? <Notification 
+        status={notificationData.status} 
+        message={notificationData.message} 
+        showtime={notificationData.showTime} 
+        /> : null
+      }
+      <div>
+        <Breadcrumbs
+          items={[{ label: "Home", to: "/" }, { label: "Launches" }]}
+        />
+        <SimpleGrid m={[2, null, 6]} minChildWidth="350px" spacing="4">
+          {error && <Error />}
+          {data &&
+            data
+              .flat()
+              .map((launch) => (
+                <LaunchItem launch={launch} favouriteLaunches={favourites} setFavouriteLaunches={setFavourites} setNotification={setNotificationData} key={launch.flight_number} />
+              ))}
+        </SimpleGrid>
+        <LoadMoreButton
+          loadMore={() => setSize(size + 1)}
+          data={data}
+          pageSize={PAGE_SIZE}
+          isLoadingMore={isValidating}
+        />
+      </div>
+    </>
   );
 }
 
-export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) {
+export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches, setNotification }) {
   const [btnState, setBtnState] = React.useState( favouriteLaunches[launch.flight_number.toString()] )
 
   return (
@@ -125,6 +134,12 @@ export function LaunchItem({ launch, favouriteLaunches, setFavouriteLaunches }) 
                 () => {
                   setFavouriteLaunches({ type: btnState ? ACTIONS.REMOVE_FAVORITE: ACTIONS.ADD_FAVORITE, payload: getLaunchPayload(launch) })
                   setBtnState(!btnState)
+                  setNotification(
+                    getNotificationData(
+                      ALERT_STATUSES.info, 
+                      "Launch : " + launch.flight_number.toString(), 
+                      " has been added to favourites", 4000  )
+                    )
                 }
               }
             />

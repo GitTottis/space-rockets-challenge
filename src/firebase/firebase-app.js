@@ -11,5 +11,14 @@ const firebaseConfig = {
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig) // Firebase App
 
+
+export function getAuthProvider(type) {
+    if(type === 'google') {
+        return new firebase.auth.GoogleAuthProvider()
+    } else {
+        return new firebase.auth.FacebookAuthProvider()
+    }
+}
+
 export default firebaseApp;
 
