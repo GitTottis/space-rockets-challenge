@@ -39,15 +39,15 @@ export default function FavoritesContextProvider({ children }) {
     }
 
     // export function useFavoritesState(key) {
-      const [favourites, setFavourites] = useReducer( favoritesReducer, {},  () => {
+    const [favourites, setFavourites] = useReducer( favoritesReducer, {},  () => {
         // return data ? JSON.parse(data) : {}
         // const data = localStorage.getItem(key)
         return {}
-      });
+    });
 
     return (
-        <FavoritesContext.Provider value={favourites}>
-            <FavoritesUpdateContext.Provider value={setFavourites}>
+        <FavoritesContext.Provider value={ favourites }>
+            <FavoritesUpdateContext.Provider value={ setFavourites }>
                 { children }
             </FavoritesUpdateContext.Provider>
         </FavoritesContext.Provider>

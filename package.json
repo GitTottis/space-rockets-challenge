@@ -12,6 +12,8 @@
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "firebase": "^8.0.1",
+    "firebaseui": "^4.7.1",
     "get-user-locale": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -41,5 +43,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "jest": "^26.6.3",
+    "mock-cloud-firestore": "^0.12.0",
+    "react-test-renderer": "^17.0.1"
   }
 }

@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Badge, Box, IconButton, SimpleGrid, Text } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 
-import Error from "./error";
-import Breadcrumbs from "./breadcrumbs";
+import Error from "../error";
+import Breadcrumbs from "../breadcrumbs";
 import LoadMoreButton from "./load-more-button";
-import { useSpaceXPaginated } from "../utils/use-space-x";
-import { ACTIONS } from "../contexts/favorites-context";
-import { useFavoritesContext, useFavoritesUpdateContext } from "../contexts/favorites-context";
+import { useSpaceXPaginated } from "../../utils/use-space-x";
+import { ACTIONS, useFavoritesContext, useFavoritesUpdateContext } from "../../contexts/favorites-context";
 
 const PAGE_SIZE = 12;
 
