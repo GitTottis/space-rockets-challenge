@@ -1,5 +1,5 @@
 import React from "react";
-import Notification, { ALERT_STATUSES, getNotificationData }  from "./notification";
+import Notification, { ALERT_STATUSES }  from "./notification";
 import {
   Flex,
   Alert,

@@ -34,7 +34,6 @@ const firestore = () => {
 let userExists = false
 
 const auth = () => {
-    console.log("mock_auth")
     return {
         onAuthStateChanged: (setUser) => {
             userExists = !userExists

@@ -18,15 +18,14 @@ export default function Logout() {
             // First write to Firestore the selected Favorites
             write(favourites, user)
                 .then(()=> {
-                    firebase.auth().signOut().then(function() {
-                        // Sign-out successful.
-                        console.info("Signed out OK. Redirecting to Home")
-                    }).catch(function(error) {
-                        throw new Error({
-                            message: error.message,
-                            code: error.code
+                    firebase.auth()
+                        .signOut()
+                        .catch(function(error) {
+                            throw new Error({
+                                message: error.message,
+                                code: error.code
+                            });
                         });
-                    });
                 })
                 .catch( error => {
                     if (Object.keys(notificationData).length === 0) 
@@ -50,18 +49,22 @@ export default function Logout() {
                     showtime={notificationData.showTime} 
                 /> : null
             }
-            <Button 
-                fontWeight="bold"
-                fontSize="lg"
-                bg="transparent"
-                variantColor="teal" 
-                variant="outline" 
-                size="lg" 
-                textAlign="center" 
-                onClick={logout}
-            >
-                Signout {user.displayName}
-            </Button>
+            { user ?
+                <Button 
+                    fontWeight="bold"
+                    fontSize="lg"
+                    bg="transparent"
+                    variantColor="teal" 
+                    variant="outline" 
+                    size="lg" 
+                    textAlign="center" 
+                    onClick={logout}
+                >
+                    Signout
+                </Button> :
+                null
+            }
+            
         </>
     )
 }

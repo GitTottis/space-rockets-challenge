@@ -14,10 +14,6 @@ export default function Login({ type }) {
     const setFavourites = useFavoritesUpdateContext()
     const [ notificationData, setNotificationData ] = React.useState({})
 
-    // React.useEffect(() => {
-    //     setNotificationData(notificationData)
-    // },[notificationData])
-
     const loginWithSocial = () => {
         
         if ( !user ) {

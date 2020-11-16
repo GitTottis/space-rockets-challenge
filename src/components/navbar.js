@@ -1,12 +1,12 @@
 import React from 'react'
 import { Flex, Text } from "@chakra-ui/core";
 import Favorites from "./favorites/favorites";
-import { AuthContext } from '../contexts/auth-context'
+import { useUserContext } from '../contexts/auth-context'
 import Logout from "./login/social-logout"
 
 
 function NavBar() {
-  const { user } = React.useContext(AuthContext)
+  const user = useUserContext()
 
   return (
     <Flex
