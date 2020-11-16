@@ -24,3 +24,6 @@ export const fixtureData = {
 
 export const mockUser = { uid: "123098asdlkj120398"}
 export const mockLaunch = { 100: {id: 100, type: 'launch'}}
+
+export const mockOKNotification = { status: "success", message: "Everything is fine", showtime: 2000 }
+export const mockErrorNotification = { status: "error", message: "Ooops", showtime: 4000 }

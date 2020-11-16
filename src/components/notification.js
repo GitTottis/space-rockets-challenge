@@ -26,20 +26,18 @@ export function getNotificationData(status, message, showTime) {
   }
 }
 
-export default function Notification({status, message, showtime }) {
+export default function Notification({ status, message, showtime }) {
 
   const { isOpen, onToggle } = useDisclosure()
   
   React.useEffect(()=>{
     // setTimeout(onToggle, showtime)
     let t1 = setTimeout(() => {
-      console.log("Opening Notification")
       onToggle(true)
-      }, 500
+      }, 0
     )
   
     let t2 = setTimeout(() => {
-      console.log("Closing Notification")
       onToggle(false)
       }, showtime
     )
@@ -51,7 +49,6 @@ export default function Notification({status, message, showtime }) {
   }, [onToggle, showtime, message])
 
   return (
-    <>
       <Slide direction="bottom" in={isOpen} style={{ zIndex: 10 }}>
         <Box
           color="white"
@@ -70,6 +67,5 @@ export default function Notification({status, message, showtime }) {
           </Alert>
         </Box>
       </Slide>
-    </>
   )
 }

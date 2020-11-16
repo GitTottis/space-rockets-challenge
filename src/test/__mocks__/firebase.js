@@ -4,7 +4,6 @@ import { fixtureData } from "../__mocks__/data";
 
 global.firebase = new MockFirebase(fixtureData, { isNaiveSnapshotListenerEnabled: true });
 
-
 const firestore = () => {
     return {
         collection: (collectionName) => {
@@ -32,9 +31,22 @@ const firestore = () => {
     }
 }
 
+let userExists = false
+
+const auth = () => {
+    console.log("mock_auth")
+    return {
+        onAuthStateChanged: (setUser) => {
+            userExists = !userExists
+            return userExists
+        }
+    }
+}
+
 const firebase = {
     firestore: firestore,
-    initializeApp: jest.fn()
+    initializeApp: jest.fn(),
+    auth: auth
 }
 
 export default firebase
