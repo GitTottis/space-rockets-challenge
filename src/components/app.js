@@ -12,8 +12,8 @@ import FavoritesContextProvider from "../contexts/favorites-context"
 
 export default function App() {
   return (
-    <AuthProvider>
-      <FavoritesContextProvider>
+    <FavoritesContextProvider>
+      <AuthProvider>
         <NavBar/>
         <Routes>
           <AuthRoute path="/" element={<Home/>} />
@@ -22,7 +22,7 @@ export default function App() {
           <AuthRoute path="/launch-pads" element={<LaunchPads/>} />
           <AuthRoute path="/launch-pads/:launchPadId" element={<LaunchPad/>} />
         </Routes>
-      </FavoritesContextProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </FavoritesContextProvider>
   );
 }

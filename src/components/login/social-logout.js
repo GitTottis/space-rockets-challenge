@@ -4,50 +4,67 @@ import { useFavoritesContext } from "../../contexts/favorites-context";
 import { Button } from "@chakra-ui/core";
 import firebase from "firebase";
 import { write } from "../../firebase/firestore";
+import Notification, { ALERT_STATUSES, getNotificationData }  from "../notification";
 
 
 export default function Logout() {
 
     const { user } = useUserContext()
-    const { favourites } = useFavoritesContext()
+    const favourites = useFavoritesContext()
+    const [ notificationData, setNotificationData ] = React.useState({})
 
     const logout = () => {
         if ( !!user ) {
             // First write to Firestore the selected Favorites
             write(favourites, user)
                 .then(()=> {
-                    firebase.auth().signOut().then(function() {
-                        // Sign-out successful.
-                        console.info("Signed out OK. Redirecting to Home")
-                    }).catch(function(error) {
-                        // An error happened.
-                        console.error("Error when Singing out ",error)
-                    });
+                    firebase.auth()
+                        .signOut()
+                        .catch(function(error) {
+                            throw new Error({
+                                message: error.message,
+                                code: error.code
+                            });
+                        });
                 })
                 .catch( error => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    
-                    console.log("Error ", errorCode, errorMessage)
-                    // TODO Handle Errors here.
-                })
+                    if (Object.keys(notificationData).length === 0) 
+                        setNotificationData(
+                            getNotificationData(
+                                ALERT_STATUSES.error, error.message, 5000
+                            )
+                        )
+                    })
+        } else {
+            console.log('No Favourites')
         }
     }
 
     return (
         <>
-            <Button 
-                fontWeight="bold"
-                fontSize="lg"
-                bg="transparent"
-                variantColor="teal" 
-                variant="outline" 
-                size="lg" 
-                textAlign="center" 
-                onClick={logout}
-            >
-                Signout {user.displayName}
-            </Button>
+            { !!notificationData && Object.keys(notificationData).length > 0 ?
+                <Notification 
+                    status={notificationData.status} 
+                    message={notificationData.message} 
+                    showtime={notificationData.showTime} 
+                /> : null
+            }
+            { user ?
+                <Button 
+                    fontWeight="bold"
+                    fontSize="lg"
+                    bg="transparent"
+                    variantColor="teal" 
+                    variant="outline" 
+                    size="lg" 
+                    textAlign="center" 
+                    onClick={logout}
+                >
+                    Signout
+                </Button> :
+                null
+            }
+            
         </>
     )
 }

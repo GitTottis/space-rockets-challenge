@@ -1,6 +1,5 @@
 import React from "react"
 import App from "../../components/app"
-import Navbar from "../../components/navbar"
 
 import { configure, shallow } from "enzyme"
 import Adapter from "enzyme-adapter-react-16"
@@ -8,21 +7,13 @@ import Adapter from "enzyme-adapter-react-16"
 configure({ adapter: new Adapter() })
 
 describe("Main App Components Testing", () => {
-
-
-    test("Hello Testing", () => {
-        expect(true).toBe(true)
-    })
-
-    test("App test", () => {
+    
+    test("App main components test", () => {
         const appWrapper = shallow(<App />)
-        appWrapper.debug()
+        expect(appWrapper.find('FavoritesContextProvider').exists()).toEqual(true)
+        expect(appWrapper.find('AuthProvider').exists()).toEqual(true)
+        expect(appWrapper.find('NavBar').exists()).toEqual(true)
+        expect(appWrapper.find('Routes').exists()).toEqual(true)
     })
-
-    test("Navbar test", () => {
-        const appWrapper = shallow(<Navbar />)
-        appWrapper.debug()
-    })
-
 })
 
